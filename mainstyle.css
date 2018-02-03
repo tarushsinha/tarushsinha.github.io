@@ -1,3 +1,8 @@
+#thisisme { text-align: left;
+						padding-left: 11cm;
+						font-size: 15px;					
+}
+
 div.container{ text-align: center }
 
 div.well{ background-color: LightGoldenRodYellow }
@@ -26,20 +31,6 @@ a:hover { color: yellow }
 a:active{ color: red }
 
 a:visited{ color: #0B0080 }
-
-#thisisme { text-align: left;
-						padding-left: 11cm;
-						font-size: 15px;					
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-}
 
 header { background: linear-gradient(to right, FloralWhite, HoneyDew) }
 
