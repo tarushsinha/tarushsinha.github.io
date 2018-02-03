@@ -1,7 +1,3 @@
-#thisisme { padding-left: 11cm;
-						font-size: 15px;					
-}
-
 div.container{ text-align: center }
 
 div.well{ background-color: LightGoldenRodYellow }
@@ -30,6 +26,11 @@ a:hover { color: yellow }
 a:active{ color: red }
 
 a:visited{ color: #0B0080 }
+
+#thisisme { padding-left: 11cm;
+						font-size: 15px;
+						text-align: left;					
+}
 
 header { background: linear-gradient(to right, FloralWhite, HoneyDew) }
 
