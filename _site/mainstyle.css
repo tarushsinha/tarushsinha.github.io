@@ -1,0 +1,40 @@
+div.container{ text-align: center }
+
+div.well{ background-color: LightGoldenRodYellow }
+
+div.leftdiv{
+	position:relative;
+	float: left;
+	width: 500px;
+}
+div.rightdiv{
+	position: relative;
+	float: right;
+	width: 500px;
+	text-align: left;
+}
+h2.intro{ text-align: center }
+
+#ig { font-size: 16px }
+
+#internships{ font-size: 13px }
+
+a:link{ color: #0645AD }
+
+a:hover { color: yellow }
+
+a:active{ color: red }
+
+a:visited{ color: #0B0080 }
+
+#thisisme { padding-left: 11cm;
+						font-size: 15px;
+						text-align: left;					
+}
+
+header { background: linear-gradient(to right, FloralWhite, HoneyDew) }
+
+nav { background: linear-gradient(to right, FloralWhite, HoneyDew) }
+
+body { background: linear-gradient(to right, FloralWhite, HoneyDew) }
+
