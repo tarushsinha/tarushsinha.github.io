@@ -1,0 +1,152 @@
+<header>
+		<br>
+		<br>
+		<div class="container">
+			<h1>Tarush Sinha</h1>
+		</div>
+	</header>
+
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="index.html">Tarush Sinha</a>
+			</div>
+			<ul class="nav navbar-nav">
+				<li><a href="index.html">Home</a></li>
+				<li><a href="aboutme.html">About Me</a></li>
+			</ul>
+		</div>
+	</nav>
+
+	<nav>
+		<div class="container">
+			<div class="well">
+				<a id="ig" href="https://github.com/tarushsinha"> Github</a>
+				&nbsp &nbsp &nbsp &nbsp
+				<a id="ig" href="https://www.linkedin.com/in/tarushsinha/"> LinkedIn</a>
+				&nbsp &nbsp &nbsp &nbsp
+				<a id="ig" href="https://www.flickr.com/photos/93022604@N05/"> Photography</a>
+				&nbsp &nbsp &nbsp &nbsp
+				<a id="ig" href="https://www.twitter.com/theglobalemcee/"> Twitter</a>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container">
+		<div class="leftdiv">
+			<h2 class="intro">Class Schedule</h2>
+			<p>This was my course schedule for my Final Semester</p>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>
+							<p align="center">Course</p>
+						</th>
+						<th>
+							<p align="center">Instructor</p>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>CMSC421: Artificial Intelligence</td>
+						<td>Dana Nau</td>
+					</tr>
+					<tr>
+						<td>CMSC435: Software Engineering</td>
+						<td>James Purtilo</td>
+					</tr>
+					<tr>
+						<td>ENGL393: Technical Writing</td>
+						<td>Alysia Sawchyn</td>
+					</tr>
+					<tr>
+						<td>MATH246: Differential Equations for Scientists/Engineers</td>
+						<td>Rodrigo Trevino</td>
+					</tr>
+					<tr>
+						<td>MUSC205: History of Popular Music, 1950 - Present</td>
+						<td>Richard King</td>
+					</tr>
+					<tr>
+						<td>PSYC123: The Psychology of Getting Hired</td>
+						<td>Lee Penn</td>
+					</tr>
+				</tbody>
+			</table>
+			<h2 class="intro">Extracurriculars</h2>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>
+							<p align="center">Organization</p>
+						</th>
+						<th>
+							<p align="center">Role(s)</p>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>America Counts</td>
+						<td>Student Mentor (2018)</td>
+					</tr>
+					<tr>
+						<td>Alpha Theta Sigma</td>
+						<td>President (2017-2018), Social Chair (2016-2018)</td>
+					</tr>
+					<tr>
+						<td>Maryland LEAD Program</td>
+						<td>Facilitator (2015 - 2017)</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="rightdiv">
+			<h2 class="intro">Internship Experience <a id="ig" href="Resume.png"><span class="glyphicon glyphicon-paperclip"
+					 style="vertical-align: middle;"></span></a></h2>
+			<ul id="internships">
+				<li>University of Maryland Institute for Advanced Computer Sciences</li>
+				<ol>
+					<li>September 2017 - December 2017</li>
+					<li>DevOps/Systems Administrator</li>
+				</ol>
+				<li>Thales e-Security</li>
+				<ol>
+					<li>May 2017 - August 2017</li>
+					<li>Software Engineering Intern</li>
+				</ol>
+				<li>GroundTruth, formerly xAd, Inc.</li>
+				<ol>
+					<li>May 2016 - August 2016</li>
+					<li>DevOps, SRE, Infrastructure Engineering Intern</li>
+				</ol>
+				<li>Electronic Arts</li>
+				<ol>
+					<li>May 2015 - August 2015</li>
+					<li>DevOps/Software Engineering Intern for EADP C&I</li>
+				</ol>
+				<li>Maryland LEAD Program</li>
+				<ol>
+					<li>August 2015 - May 2017</li>
+					<li>Facilitator, Web Admin</li>
+				</ol>
+				<li>Glassbeam</li>
+				<ol>
+					<li>December 2014 - March 2015</li>
+					<li>June 2013 - August 2014</li>
+				</ol>
+			</ul>
+		</div>
+	</div>
+
+	<footer>
+		<div class="container">
+			<div class="panel panel-default">
+				<div class="panel-body">For any comments, questions, or inquiries, please contact me at: tarush.umdcs@gmail.com <a
+					 id="ig" href="mailto:tarush.umdcs@gmail.com?Subject=From Your Website"><span class="glyphicon glyphicon-envelope"></span>
+					</a></div>
+			</div>
+		</div>
+	</footer>
