@@ -31,7 +31,7 @@ git push -u origin feature/awesome-update
 
 After review, use GitHub's squash-merge (or fast-forward) to integrate changes, then prune locally: `git branch -d feature/awesome-update` and `git fetch --prune`.
 
-### Keeping forks in sync
+<!-- ### Keeping forks in sync
 
 If you're working from a fork, add the upstream remote once:
 
@@ -39,4 +39,4 @@ If you're working from a fork, add the upstream remote once:
 git remote add upstream git@github.com:tarushsinha/tarushsinha.github.io.git
 ```
 
-Then keep `main` updated with `git fetch upstream && git checkout main && git rebase upstream/main` so your branches track the latest changes.
+Then keep `main` updated with `git fetch upstream && git checkout main && git rebase upstream/main` so your branches track the latest changes. -->
