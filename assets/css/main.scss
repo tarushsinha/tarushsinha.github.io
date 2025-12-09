@@ -1,0 +1,62 @@
+---
+---
+
+@import "so-simple";   // pull in the theme’s default styles
+
+/* Custom styles below */
+
+.about-me {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.about-me .profile-photo {
+    float: left;
+    width: 35%;
+    max-width: 360px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.about-me p,
+.about-me h4 {
+    line-height: 1.6;
+}
+
+.resume-links {
+    text-align: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+.resume-links a {
+    display: inline-block;
+    padding: 0.6rem 1.4rem;
+    margin: 0 0.5rem;
+    border-radius: 999px;          /* pill-shaped */
+    border: 1px solid currentColor;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.resume-links a:hover {
+    background-color: #000;
+    color: #fff !important;
+    border-color: #000;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+    .about-me .profile-photo {
+        float: none;
+        width: 100%;
+        max-width: 480px;
+        margin-right: 0;
+        margin-bottom: 1.5rem;
+    }
+}
