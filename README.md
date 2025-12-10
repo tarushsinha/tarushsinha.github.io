@@ -21,11 +21,12 @@ To avoid polluting system Python and to keep dependencies consistent across mach
 python3 -m venv .venv
 source .venv/bin/activate
 
-To exit later, run:
+#To exit later, run:
 deactivate
+```
 
 ### 2. Installing dependences(in venv):
-pip install -r requirements.txt
+```pip install -r requirements.txt```
 
 ## Git workflow best practices
 
