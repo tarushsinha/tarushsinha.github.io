@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*!
  * So Simple Jekyll Theme 3.2.0
  * Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
@@ -686,10 +687,77 @@ figure.align-center figcaption { text-align: center; }
 
 .about-me p, .about-me h4 { line-height: 1.6; }
 
+/* About page: email link matches text color, underlined */
+.about-me .email { color: inherit; text-decoration: underline; }
+
+/* On hover: accent color (tweak this hex later if you like) */
+.about-me .email:hover { color: #8deaebf0; /* blue highlight */ text-decoration-thickness: 1.5px; text-underline-offset: 2px; }
+
 .resume-links { text-align: center; margin-top: 2rem; margin-bottom: 2rem; font-size: 1.1rem; }
 
-.resume-links a { display: inline-block; padding: 0.6rem 1.4rem; margin: 0 0.5rem; border-radius: 999px; /* pill-shaped */ border: 1px solid currentColor; text-decoration: none; font-weight: 500; transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease; }
+.resume-links a { display: inline-block; padding: 0.6rem 1.4rem; margin: 0 0.5rem; border-radius: 999px; /* pill-shaped */ border: 4px solid #000; color: #ffffffb3; text-decoration: none; font-weight: 500; transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease; }
 
-.resume-links a:hover { background-color: #000; color: #fff !important; border-color: #000; transform: translateY(-1px); }
+.resume-links a:hover { background-color: #000; color: #fff !important; border-color: #ffffff; transform: translateY(-1px); }
 
 @media (max-width: 768px) { .about-me .profile-photo { float: none; width: 100%; max-width: 480px; margin-right: 0; margin-bottom: 1.5rem; } }
+.recent-feed { margin-top: 2rem; }
+
+/* layout: fixed-width cards, wrap as needed */
+.recent-feed-grid { display: flex; flex-wrap: wrap; gap: 1.75rem; justify-content: center; }
+
+.recent-card-link { display: block; text-decoration: none; color: inherit; }
+
+.recent-card { background: #355e3ba5; /* transparent green card */ color: #f9fafb; border-radius: 1.2rem; overflow: hidden; box-shadow: 0 18px 35px #0f172a8c; display: flex; flex-direction: column; width: 320px; /* fixed width on desktop */ max-width: 100%; /* can shrink on small screens */ height: 420px; /* fixed height */ backdrop-filter: blur(4px); transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease; }
+
+.recent-card-image-wrapper { display: block; width: 100%; height: 190px; /* fixed image area height */ overflow: hidden; background: transparent; /* or a subtle tint if you want a “placeholder” */ }
+
+.recent-card-image-wrapper--empty { background: rgba(0, 0, 0, 0.06); }
+
+.recent-card-image { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s ease; }
+
+.recent-card-image-link:hover .recent-card-image { transform: scale(1.03); }
+
+/* body / text bits stay the same if you already added them, but for reference: */
+.recent-card-body { flex: 1; padding: 1.25rem 1.4rem 1.4rem; display: flex; flex-direction: column; gap: 0.6rem; }
+
+/* Base pill */
+.recent-card-tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; background: #3b82f6; /* default blue */ color: #fff; }
+
+/* Collection-specific colors */
+.recent-card-tag--articles { background: #3b82f6; /* blue */ color: #ffffff; }
+
+.recent-card-tag--textposts { background: #facc15; /* yellow */ color: #111827; /* dark text for contrast */ }
+
+.recent-card-tag--podcasts { background: #ef4444; /* red */ color: #ffffff; }
+
+.recent-card-title { margin: 0; font-size: 1.1rem; }
+
+.recent-card-title a { color: inherit; text-decoration: none; }
+
+.recent-card-title a:hover { text-decoration: underline; }
+
+.recent-card-excerpt { margin: 0.1rem 0 0.3rem; font-size: 0.9rem; line-height: 1.4; opacity: 0.9; }
+
+.recent-card-meta { margin-top: auto; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.8; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #ffffffef; padding-top: 0.75rem; }
+
+.recent-card-read { white-space: nowrap; text-align: right; }
+
+.recent-card-date { white-space: nowrap; }
+
+.recent-card-link:hover .recent-card, .recent-card-link:focus-visible .recent-card { transform: translateY(-6px); box-shadow: 0 24px 50px #0f172abf; background: #355e3b; /* a bit more solid on hover */ }
+
+/* ---- Global background + kill white slab from So Simple ---- */
+/* site background */
+html, body { background-color: #355e3b9e; }
+
+/* central content wrappers from So Simple */
+.site, .site-content, .wrap, .page, .page-content, .site-main, .main, .layout--home, .layout--page, .entry, .entry-content { background-color: transparent !important; box-shadow: none !important; }
+
+/* Default content text color on dark */
+.entry, .page-content, .about-me { color: #ffffffbe; /* near-white, easy to read */ }
+
+/* Keep headings strong */
+.entry h1, .entry h2, .entry h3, .about-me h1, .about-me h2, .about-me h3 { color: #ffffffbe; }
+
+/* Home page: make "Recent Updates" heading dark like the main title */
+.layout--home .recent-feed h2 { color: #111827; /* near-black */ }

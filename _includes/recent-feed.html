@@ -1,0 +1,57 @@
+{% comment %}
+    Collect content from posts + custom collections
+{% endcomment %}
+{% assign all_items = site.textposts | concat: site.podcasts | concat: site.articles %}
+{% assign all_items = all_items | sort: "date" | reverse %}
+
+<section class = "recent-feed">
+    <h2> Recent Updates</h2>
+
+    <div class="recent-feed-grid">
+        {% for item in all_items limit: 10 %}
+            <a href="{{ item.url | relative_url }}" class="recent-card-link">
+                <article class="recent-card">
+                    <div class="recent-card-image-wrapper {% unless item.image %}recent-card-image-wrapper--empty{% endunless %}">
+                        {% if item.image %}
+                            <img
+                            src="{{ item.image | relative_url }}"
+                            alt="{{ item.title }}"
+                            class="recent-card-image"
+                            >
+                        {% endif %}
+                    </div>
+
+                    <div class="recent-card-body">
+                        {% if item.collection %}
+                            <span class="recent-card-tag recent-card-tag--{{ item.collection }}">
+                            {{ item.collection | replace:'_',' ' | upcase }}
+                            </span>
+                        {% endif %}
+
+                        <h3 class="recent-card-title">
+                            {{ item.title }}
+                        </h3>
+
+                        {% if item.excerpt %}
+                            <p class="recent-card-excerpt">
+                            {{ item.excerpt | strip_html | truncate: 160 }}
+                            </p>
+                        {% endif %}
+
+                        <div class="recent-card-meta">
+                            <span class="recent-card-date">
+                            {{ item.date | date: "%Y-%m-%d" }}
+                            </span>
+
+                            {% if site.read_time %}
+                            <span class="recent-card-read">
+                                {% include read-time.html content=item.content %}
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </article>
+            </a>
+        {% endfor %}
+    </div>
+</section>
