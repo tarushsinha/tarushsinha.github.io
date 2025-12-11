@@ -1,0 +1,58 @@
+{% comment %}
+  Wiki collection grid
+  Uses same card style as recent-feed cards.
+{% endcomment %}
+
+<section class="wiki-grid-section">
+    <div class="wiki-grid">
+        {% for collection in site.data.wiki_collections %}
+            {%- assign coll_obj  = site[collection.id] -%}
+            {%- assign count     = coll_obj | size -%}
+            {%- assign sorted    = coll_obj | sort: "date" -%}
+            {%- assign last_item = sorted | last -%}
+
+            {%- if last_item -%}
+                {%- assign last_date = last_item.date | date: "%Y-%m-%d" -%}
+            {%- else -%}
+                {%- assign last_date = "—" -%}
+            {%- endif -%}
+
+            <a href="{{ collection.url | relative_url }}" class="recent-card-link wiki-card-link">
+                <article class="recent-card wiki-card">
+                    <div class="recent-card-image-wrapper {% unless collection.image %}recent-card-image-wrapper--empty{% endunless %}">
+                        {% if collection.image %}
+                            <img
+                                src="{{ collection.image | relative_url }}"
+                                alt="{{ collection.name }}"
+                                class="recent-card-image"
+                            >
+                        {% endif %}
+                    </div>
+
+                    <div class="recent-card-body wiki-card-body">
+                        <h3 class="recent-card-title wiki-card-title">
+                            {{ collection.name }}
+                        </h3>
+
+                        {% if collection.description %}
+                            <p class="recent-card-excerpt wiki-card-excerpt">
+                                {{ collection.description }}
+                            </p>
+                        {% endif %}
+
+                        <div class="recent-card-meta wiki-card-meta">
+                            <span class="wiki-card-updated">
+                                Updated&nbsp;{{ last_date }}
+                            </span>
+
+                            <span class="wiki-card-count">
+                                {{ count }}
+                                {% if count == 1 %}item{% else %}items{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </article>
+            </a>
+        {% endfor %}
+    </div>
+</section>

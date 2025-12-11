@@ -7,6 +7,27 @@
 
 If `_config.yml` changes, restart the server so new settings are picked up.
 
+## Syncing Notion wiki articles into Jekyll (`sync_notion_article.py`)
+
+This project includes a small Python tool that pulls completed wiki pages from your Notion database and converts them into Markdown files under `_articles/`.
+
+Copy `.env.example` into `.env` and update secrets on new machine
+
+### 1. Create and work in a Python virtual environment
+
+To avoid polluting system Python and to keep dependencies consistent across machines, create a local virtual environment:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+
+#To exit later, run:
+deactivate
+```
+
+### 2. Installing dependences(in venv):
+```pip install -r requirements.txt```
+
 ## Git workflow best practices
 
 - **Create focused branches**: `git checkout -b feature/slug` off the latest `main`. Keep scope small and related to a single change.

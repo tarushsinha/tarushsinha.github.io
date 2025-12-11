@@ -1,0 +1,8 @@
+1. Finish Notion -> Jekyll sync
+    a. Implement formatter
+    b. Implement publish to page
+2. Format the responses on the page
+    a. Update wiki-articles, wiki-podcasts, wiki-textposts formatting (match wiki landing and home page card layout)
+3. Import article - sync
+4. Import podcasts
+5. Remove sample posts from testing

@@ -3,6 +3,9 @@ description: "Home for my writing, wiki, and work"
 url: "https://tarushsinha.github.io"
 baseurl: ""
 
+read_time: true
+words_per_minute: 200
+
 remote_theme: "mmistakes/so-simple-theme@3.2.0"
 
 plugins:
