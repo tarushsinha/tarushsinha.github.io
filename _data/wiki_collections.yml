@@ -1,0 +1,17 @@
+- id: textposts
+  name: Text Posts
+  url: /wiki/textposts/
+  image: /assets/Images/wiki/textposts.jpg   # you choose the path
+  description: call it a blog or something
+
+- id: podcasts
+  name: Podcasts
+  url: /wiki/podcasts/
+  image: /assets/Images/wiki/podcasts.jpg
+  description: shoutout to notebooklm
+
+- id: articles
+  name: Articles
+  url: /wiki/articles/
+  image: /assets/Images/wiki/articles.jpg
+  description: wiki-ception

@@ -113,11 +113,10 @@
 }
 
 .recent-card-image-wrapper {
-  display: block;
   width: 100%;
-  height: 190px;              /* fixed image area height */
+  aspect-ratio: 16 / 9;
   overflow: hidden;
-  background: transparent;    /* or a subtle tint if you want a “placeholder” */
+  background: transparent;
 }
 
 .recent-card-image-wrapper--empty {
@@ -128,6 +127,14 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.recent-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;       /* full band filled if the ratios match */
   display: block;
   transition: transform 0.3s ease;
 }
@@ -224,6 +231,72 @@
   transform: translateY(-6px);
   box-shadow: 0 24px 50px #0f172abf;
   background: #355e3b;   /* a bit more solid on hover */
+}
+
+/* ==== WIKI GRID ==== */
+
+.wiki-grid-section {
+  margin-top: 2rem;
+}
+
+.wiki-title {
+  font-size: 2.4rem;
+  margin-bottom: 0.25rem;
+}
+
+.wiki-subtitle {
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+.wiki-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)); /* 3 by Y on desktop */
+  gap: 1.75rem;
+  justify-items: center;  /* center the fixed-width cards */
+}
+
+/* Responsive breakpoints */
+@media (max-width: 1000px) {
+  .wiki-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .wiki-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Slight tweaks so wiki cards breathe nicely */
+.wiki-card {
+  height: 420px;         /* same size as recent cards */
+}
+
+.wiki-card-body {
+  /* inherit from .recent-card-body, but we can tweak if needed */
+}
+
+.wiki-card-meta {
+  justify-content: space-between;
+}
+
+.wiki-card-count,
+.wiki-card-updated {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
+}
+
+.wiki-card-meta-date {
+  white-space: nowrap;
+}
+
+.wiki-card-meta-count {
+  white-space: nowrap;
+  text-align: right;
 }
 
 /* ---- Global background + kill white slab from So Simple ---- */
