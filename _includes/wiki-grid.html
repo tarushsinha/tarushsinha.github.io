@@ -4,55 +4,112 @@
 {% endcomment %}
 
 <section class="wiki-grid-section">
+    {% if include.section_title %}
+        <h2>{{ include.section_title }}</h2>
+    {% endif %}
     <div class="wiki-grid">
-        {% for collection in site.data.wiki_collections %}
-            {%- assign coll_obj  = site[collection.id] -%}
-            {%- assign count     = coll_obj | size -%}
-            {%- assign sorted    = coll_obj | sort: "date" -%}
-            {%- assign last_item = sorted | last -%}
-
-            {%- if last_item -%}
-                {%- assign last_date = last_item.date | date: "%Y-%m-%d" -%}
-            {%- else -%}
-                {%- assign last_date = "—" -%}
-            {%- endif -%}
-
-            <a href="{{ collection.url | relative_url }}" class="recent-card-link wiki-card-link">
-                <article class="recent-card wiki-card">
-                    <div class="recent-card-image-wrapper {% unless collection.image %}recent-card-image-wrapper--empty{% endunless %}">
-                        {% if collection.image %}
-                            <img
-                                src="{{ collection.image | relative_url }}"
-                                alt="{{ collection.name }}"
-                                class="recent-card-image"
-                            >
-                        {% endif %}
-                    </div>
-
-                    <div class="recent-card-body wiki-card-body">
-                        <h3 class="recent-card-title wiki-card-title">
-                            {{ collection.name }}
-                        </h3>
-
-                        {% if collection.description %}
-                            <p class="recent-card-excerpt wiki-card-excerpt">
-                                {{ collection.description }}
-                            </p>
-                        {% endif %}
-
-                        <div class="recent-card-meta wiki-card-meta">
-                            <span class="wiki-card-updated">
-                                Updated&nbsp;{{ last_date }}
-                            </span>
-
-                            <span class="wiki-card-count">
-                                {{ count }}
-                                {% if count == 1 %}item{% else %}items{% endif %}
-                            </span>
+        {% if include.items %}
+            {% assign pill_label = include.pill | default: include.collection_id | upcase %}
+            {% assign collection_tag = include.collection_id | default: "articles" %}
+            {% for item in include.items %}
+                <a href="{{ item.url | relative_url }}" class="recent-card-link wiki-card-link">
+                    <article class="recent-card wiki-card">
+                        <div class="recent-card-image-wrapper {% unless item.image %}recent-card-image-wrapper--empty{% endunless %}">
+                            {% if item.image %}
+                                <img
+                                    src="{{ item.image | relative_url }}"
+                                    alt="{{ item.title }}"
+                                    class="recent-card-image"
+                                >
+                            {% endif %}
                         </div>
-                    </div>
-                </article>
-            </a>
-        {% endfor %}
+
+                        <div class="recent-card-body wiki-card-body">
+                            <span class="recent-card-tag recent-card-tag--{{ collection_tag }}">
+                                {{ pill_label }}
+                            </span>
+
+                            <h3 class="recent-card-title wiki-card-title">
+                                {{ item.title }}
+                            </h3>
+
+                            {% if item.excerpt %}
+                                {% assign card_excerpt = item.excerpt | strip_html | truncate: 160 %}
+                            {% else %}
+                                {% assign card_excerpt = item.content | strip_html | truncatewords: 28 %}
+                            {% endif %}
+
+                            {% if card_excerpt %}
+                                <p class="recent-card-excerpt wiki-card-excerpt">
+                                    {{ card_excerpt }}
+                                </p>
+                            {% endif %}
+
+                            <div class="recent-card-meta wiki-card-meta">
+                                <span class="recent-card-date">
+                                    {{ item.date | date: "%Y-%m-%d" }}
+                                </span>
+
+                                {% if site.read_time %}
+                                    <span class="recent-card-read">
+                                        {% include read-time.html content=item.content %}
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </article>
+                </a>
+            {% endfor %}
+        {% else %}
+            {% for collection in site.data.wiki_collections %}
+                {%- assign coll_obj  = site[collection.id] -%}
+                {%- assign count     = coll_obj | size -%}
+                {%- assign sorted    = coll_obj | sort: "date" -%}
+                {%- assign last_item = sorted | last -%}
+
+                {%- if last_item -%}
+                    {%- assign last_date = last_item.date | date: "%Y-%m-%d" -%}
+                {%- else -%}
+                    {%- assign last_date = "—" -%}
+                {%- endif -%}
+
+                <a href="{{ collection.url | relative_url }}" class="recent-card-link wiki-card-link">
+                    <article class="recent-card wiki-card">
+                        <div class="recent-card-image-wrapper {% unless collection.image %}recent-card-image-wrapper--empty{% endunless %}">
+                            {% if collection.image %}
+                                <img
+                                    src="{{ collection.image | relative_url }}"
+                                    alt="{{ collection.name }}"
+                                    class="recent-card-image"
+                                >
+                            {% endif %}
+                        </div>
+
+                        <div class="recent-card-body wiki-card-body">
+                            <h3 class="recent-card-title wiki-card-title">
+                                {{ collection.name }}
+                            </h3>
+
+                            {% if collection.description %}
+                                <p class="recent-card-excerpt wiki-card-excerpt">
+                                    {{ collection.description }}
+                                </p>
+                            {% endif %}
+
+                            <div class="recent-card-meta wiki-card-meta">
+                                <span class="wiki-card-updated">
+                                    Updated&nbsp;{{ last_date }}
+                                </span>
+
+                                <span class="wiki-card-count">
+                                    {{ count }}
+                                    {% if count == 1 %}item{% else %}items{% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </article>
+                </a>
+            {% endfor %}
+        {% endif %}
     </div>
 </section>

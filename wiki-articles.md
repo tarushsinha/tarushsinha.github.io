@@ -3,8 +3,5 @@ layout: page
 title: "Articles"
 permalink: /wiki/articles/
 ---
-<ul>
-{% for art in site.articles %}
-  <li><a href="{{ art.url | relative_url }}">{{ art.title }}</a>{% if art.summary %} — {{ art.summary }}{% endif %}</li>
-{% endfor %}
-</ul>
+{% assign wiki_items = site.articles | sort: "date" | reverse %}
+{% include wiki-grid.html items=wiki_items collection_id="articles" pill="ARTICLES" %}

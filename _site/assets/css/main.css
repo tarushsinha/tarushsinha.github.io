@@ -787,3 +787,28 @@ html, body { background-color: #355e3b9e; }
 
 /* Home page: make "Recent Updates" heading dark like the main title */
 .layout--home .recent-feed h2 { color: #111827; /* near-black */ }
+
+/* ---- Article reading surface ---- */
+.article-surface { background: #ffffff; color: #111; max-width: 800px; margin: 4rem auto; padding: 3rem; border-radius: 24px; box-shadow: 0 12px 32px rgba(15, 23, 42, 0.16); }
+
+.article-surface h1, .article-surface h2, .article-surface h3, .article-surface h4, .article-surface h5, .article-surface h6, .article-surface p, .article-surface li { color: inherit; }
+
+.article-surface a { color: #0f3d8f; text-decoration: underline; }
+
+.layout-article { background: transparent; }
+
+.layout-article .page, .layout-article .wrap, .layout-article .site-content, .layout-article .site-main { background: transparent !important; }
+
+body.layout--article { background: #355e3b9e !important; }
+
+body.layout--article .initial-content, body.layout--article .wrap, body.layout--article .page, body.layout--article .page__inner-wrap, body.layout--article .site-content, body.layout--article .site-main, body.layout--article .main-content { background: transparent !important; }
+
+body.layout--article .page-wrapper { background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.18) 100%); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.34); border-radius: 28px; max-width: 1100px; margin: 2.5rem auto; padding: 1.5rem; box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18); }
+
+body.layout--article .article-surface { width: 100%; max-width: none; margin: 1.25rem 0 0; padding: 2rem; color: rgba(0, 0, 0, 0.85); background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.34) 100%); border: 1px solid rgba(255, 255, 255, 0.42); border-radius: 22px; -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12); }
+
+body.layout--article .article-surface h1, body.layout--article .article-surface h2, body.layout--article .article-surface h3, body.layout--article .article-surface h4, body.layout--article .article-surface h5, body.layout--article .article-surface h6, body.layout--article .article-surface p, body.layout--article .article-surface li { color: inherit; }
+
+body.layout--article .article-surface a { color: #0f3d8f; text-decoration: underline; }
+
+body.layout--article .page-title { text-align: center; margin-left: auto; margin-right: auto; margin-bottom: 2.25rem; max-width: 24ch; }
