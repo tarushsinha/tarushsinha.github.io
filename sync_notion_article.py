@@ -15,10 +15,13 @@ Interactive Notion -> Jekyll article exporter
 
 import os
 import re
+import ssl
 import sys
+import urllib3
 import requests
 from datetime import datetime
 from dotenv import load_dotenv
+from requests.adapters import HTTPAdapter
 
 #load variables from .env into os.environ
 load_dotenv()
@@ -42,6 +45,27 @@ HEADERS = {
     "Notion-Version": NOTION_VERSION,
     "Content-Type": "application/json",
 }
+
+class _SSLIgnoreEOFAdapter(HTTPAdapter):
+    """Tolerate premature EOF during TLS handshake (Python 3.14 + some servers)."""
+    def init_poolmanager(self, *args, **kwargs):
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = True
+        ctx.verify_mode = ssl.CERT_REQUIRED
+        ctx.options |= getattr(ssl, "OP_IGNORE_UNEXPECTED_EOF", 0)
+        kwargs["ssl_context"] = ctx
+        retry = urllib3.Retry(
+            total=5,
+            backoff_factor=0.5,
+            status_forcelist=[429, 500, 502, 503, 504],
+            allowed_methods=["GET", "POST"],
+        )
+        kwargs["retries"] = retry
+        super().init_poolmanager(*args, **kwargs)
+
+_SESSION = requests.Session()
+_SESSION.headers.update(HEADERS)
+_SESSION.mount("https://", _SSLIgnoreEOFAdapter())
 
 ARTICLES_DIR = "_articles"
 
@@ -81,7 +105,7 @@ def resolve_data_source_id() -> str:
     
     #Discover data sourcea from database metadata
     url = f"https://api.notion.com/v1/databases/{NOTION_DB_ID}"
-    response = requests.get(url, headers = HEADERS)
+    response = _SESSION.get(url)
     try:
         response.raise_for_status()
     except requests.HTTPError as e:
@@ -157,7 +181,7 @@ def query_data_source(data_source_id: str):
     results = []
     payload = body
     while True:
-        response = requests.post(url, headers=HEADERS, json=payload)
+        response = _SESSION.post(url, json=payload)
         response.raise_for_status()
         data = response.json()
         results.extend(data.get("results", []))
@@ -195,7 +219,7 @@ def fetch_block_children_paginated(block_id: str, notion=None) -> list[dict]:
             params = {}
             if next_cursor:
                 params["start_cursor"] = next_cursor
-            response = requests.get(url, headers=HEADERS, params=params)
+            response = _SESSION.get(url, params=params)
             if not response.ok:
                 print("ERROR: Failed to fetch block children")
                 print("Status:", response.status_code)
@@ -322,33 +346,56 @@ def _render_table_markdown(table_block: dict, depth=0):
 
     return "\n".join(lines)
 
+def _render_children(block, depth):
+    """Render any children stored on a block, returning a string or empty string."""
+    children = block.get("children", [])
+    if not children:
+        return ""
+    return "\n\n" + blocks_to_markdown(children, depth=0)
+
 def block_to_md(block, depth=0):
     block_type = block.get("type")
     data = block.get(block_type, {})
     indent = "  " * depth
 
     if block_type == "paragraph":
-        return f"{indent}{notion_rich_text_to_md(data.get('rich_text', []))}"
+        return f"{indent}{notion_rich_text_to_md(data.get('rich_text', []))}" + _render_children(block, depth)
 
     if block_type == "heading_1":
-        return f"{indent}# {notion_rich_text_to_md(data.get('rich_text', []))}"
+        return f"{indent}# {notion_rich_text_to_md(data.get('rich_text', []))}" + _render_children(block, depth)
     if block_type == "heading_2":
-        return f"{indent}## {notion_rich_text_to_md(data.get('rich_text', []))}"
+        return f"{indent}## {notion_rich_text_to_md(data.get('rich_text', []))}" + _render_children(block, depth)
     if block_type == "heading_3":
-        return f"{indent}### {notion_rich_text_to_md(data.get('rich_text', []))}"
+        return f"{indent}### {notion_rich_text_to_md(data.get('rich_text', []))}" + _render_children(block, depth)
 
     if block_type == "bulleted_list_item":
-        line = f"{indent}- {notion_rich_text_to_md(data.get('rich_text', []))}"
+        text = notion_rich_text_to_md(data.get("rich_text", []))
+        line = f"- {text}"
         children = block.get("children", [])
         if children:
-            line = f"{line}\n{blocks_to_markdown(children, depth + 1, list_context=True)}"
+            child_lines = []
+            for child in children:
+                child_md = block_to_md(child, depth=0)
+                if child_md:
+                    indented = "\n".join("  " + l if l.strip() else l for l in child_md.splitlines())
+                    child_lines.append(indented)
+            if child_lines:
+                line = line + "\n" + "\n".join(child_lines)
         return line
 
     if block_type == "numbered_list_item":
-        line = f"{indent}1. {notion_rich_text_to_md(data.get('rich_text', []))}"
+        text = notion_rich_text_to_md(data.get("rich_text", []))
+        line = f"1. {text}"
         children = block.get("children", [])
         if children:
-            line = f"{line}\n{blocks_to_markdown(children, depth + 1, list_context=True)}"
+            child_lines = []
+            for child in children:
+                child_md = block_to_md(child, depth=0)
+                if child_md:
+                    indented = "\n".join("   " + l if l.strip() else l for l in child_md.splitlines())
+                    child_lines.append(indented)
+            if child_lines:
+                line = line + "\n" + "\n".join(child_lines)
         return line
 
     if block_type == "to_do":
@@ -356,11 +403,11 @@ def block_to_md(block, depth=0):
         line = f"{indent}- [{checkbox}] {notion_rich_text_to_md(data.get('rich_text', []))}"
         children = block.get("children", [])
         if children:
-            line = f"{line}\n{blocks_to_markdown(children, depth + 1, list_context=True)}"
+            line = f"{line}\n\n{blocks_to_markdown(children, depth=0)}"
         return line
 
     if block_type == "quote":
-        return f"{indent}> {notion_rich_text_to_md(data.get('rich_text', []))}"
+        return f"{indent}> {notion_rich_text_to_md(data.get('rich_text', []))}" + _render_children(block, depth)
 
     if block_type == "code":
         language = data.get("language", "")
@@ -374,7 +421,7 @@ def block_to_md(block, depth=0):
         icon = block.get("callout", {}).get("icon", {})
         emoji = icon.get("emoji", "")
         prefix = f"{emoji} " if emoji else ""
-        return f"{indent}> {prefix}{notion_rich_text_to_md(data.get('rich_text', []))}"
+        return f"{indent}> {prefix}{notion_rich_text_to_md(data.get('rich_text', []))}" + _render_children(block, depth)
 
     if block_type == "image":
         image_data = data or {}
@@ -390,10 +437,11 @@ def block_to_md(block, depth=0):
     if block_type == "toggle":
         summary = notion_rich_text_to_md(data.get("rich_text", []))
         children = block.get("children", [])
+        header_line = f"**{summary}**" if summary else ""
         if children:
-            child_md = blocks_to_markdown(children, depth=depth)
-            return f"{indent}<details>\n{indent}<summary>{summary}</summary>\n\n{child_md}\n\n{indent}</details>"
-        return f"{indent}<details>\n{indent}<summary>{summary}</summary>\n{indent}</details>"
+            child_md = blocks_to_markdown(children, depth=0)
+            return f"{header_line}\n\n{child_md}" if header_line else child_md
+        return header_line
 
     if block_type == "table":
         return _render_table_markdown(block, depth=depth)
@@ -411,9 +459,7 @@ def blocks_to_markdown(blocks, depth=0, list_context=False):
         md = block_to_md(block, depth=depth)
         if md is not None and md != "":
             rendered.append(md)
-
-    separator = "\n" if list_context else "\n\n"
-    return separator.join(rendered)
+    return "\n\n".join(rendered)
 
 def write_article_file(title, slug, date, tags, notion_id, body_md):
     os.makedirs(ARTICLES_DIR, exist_ok=True)
