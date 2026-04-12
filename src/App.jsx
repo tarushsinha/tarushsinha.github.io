@@ -28,7 +28,7 @@ export default function App() {
       <main className="main">
         {tab === "atlas" && <Atlas onAbout={() => setTab("about")} onWiki={() => setTab("wiki")} />}
         {tab === "wiki"  && <Wiki  onAtlas={() => setTab("atlas")} />}
-        {tab === "about" && <About onAtlas={() => setTab("atlas")} />}
+        {tab === "about" && <About onAtlas={() => setTab("atlas")} onWiki={() => setTab("wiki")} />}
       </main>
     </div>
   );

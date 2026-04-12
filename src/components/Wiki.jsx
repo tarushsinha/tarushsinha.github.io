@@ -1,7 +1,7 @@
 import { useState } from "react";
 import MiniMap from "./MiniMap";
 
-const POSTS = [
+export const POSTS = [
   { id: 1, type: "essay",   title: "On building things in public",     date: "Apr 2025", url: null },
   { id: 2, type: "podcast", title: "Episode 08 — AI tools I actually use", date: "Mar 2025", url: null },
   { id: 3, type: "blog",    title: "React patterns I keep coming back to",  date: "Mar 2025", url: null },

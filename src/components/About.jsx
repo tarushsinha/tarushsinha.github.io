@@ -1,5 +1,6 @@
 import MiniMap from "./MiniMap";
 import { LOCATIONS, TRIPS } from "../data/atlas";
+import { POSTS } from "./Wiki";
 
 const LINKS = [
   { name: "Resume",    desc: "Experience & background", color: "#a07848", url: "#" },
@@ -8,10 +9,11 @@ const LINKS = [
   { name: "Goodreads", desc: "What I'm reading",        color: "#7a5c3a", url: "#" },
 ];
 
-export default function About({ onAtlas }) {
-  const hubs    = LOCATIONS.filter((l) => l.hub).length;
+export default function About({ onAtlas, onWiki }) {
+  const hubs = LOCATIONS.filter((l) => l.hub).length;
   const visited = LOCATIONS.length;
   const continents = 6;
+  const recent = POSTS.slice(0, 3);
 
   return (
     <div className="about-wrap">
@@ -64,6 +66,24 @@ export default function About({ onAtlas }) {
             <div className="about-stat-n">{hubs}</div>
             <div className="about-stat-l">Home bases</div>
           </div>
+        </div>
+      </div>
+
+      <div className="about-wiki-panel">
+        <div className="about-wiki-header">
+          <span className="about-wiki-title">Recent writing</span>
+          <button className="about-wiki-all" onClick={onWiki}>all →</button>
+        </div>
+        <div className="about-wiki-posts">
+          {recent.map((post) => (
+            <div key={post.id} className="about-wiki-post">
+              <span className={`wiki-type t-${post.type}`}>{post.type}</span>
+              <div className="about-wiki-post-body">
+                <div className="about-wiki-post-title">{post.title}</div>
+                <div className="about-wiki-post-date">{post.date}</div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
