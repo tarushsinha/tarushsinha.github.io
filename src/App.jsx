@@ -5,7 +5,7 @@ import About from "./components/About";
 import "./App.css";
 
 export default function App() {
-  const [tab, setTab] = useState("atlas");
+  const [tab, setTab] = useState("about");
 
   return (
     <div className="site">
@@ -14,7 +14,7 @@ export default function App() {
           Tarush Sinha <span className="nav-kanji">道</span>
         </div>
         <div className="nav-tabs">
-          {["atlas", "wiki", "about"].map((t) => (
+          {["about", "wiki", "atlas"].map((t) => (
             <button
               key={t}
               className={`nav-tab ${tab === t ? "active" : ""}`}
