@@ -1,63 +1,147 @@
-## Serve the Jekyll site locally
+# Atlas Site
 
-1. Ensure Ruby, Bundler, and Jekyll are installed (the GitHub Pages Gemfile already pins the supported versions).
-2. Install dependencies: `bundle install`
-3. Start the dev server: `bundle exec jekyll serve`
-4. Visit http://localhost:4000 to preview the site. The server watches for changes and rebuilds automatically; stop it with `Ctrl+C`.
+Personal website with an illustrated interactive world map, wiki, and about page.
+Built with React + D3. Deployed to GitHub Pages with `gh-pages`.
 
-If `_config.yml` changes, restart the server so new settings are picked up.
+---
 
-## Syncing Notion wiki articles into Jekyll (`sync_notion_article.py`)
-
-This project includes a small Python tool that pulls completed wiki pages from your Notion database and converts them into Markdown files under `_articles/`.
-
-Copy `.env.example` into `.env` and update secrets on new machine
-
-### 1. Create and work in a Python virtual environment
-
-To avoid polluting system Python and to keep dependencies consistent across machines, create a local virtual environment:
+## Setup
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
+# 1. Install dependencies
+npm install
 
-#To exit later, run:
-deactivate
+# 2. Start local dev server
+npm start
 ```
 
-### 2. Installing dependences(in venv):
-```pip install -r requirements.txt```
+## Local Preview
 
-## Git workflow best practices
-
-- **Create focused branches**: `git checkout -b feature/slug` off the latest `main`. Keep scope small and related to a single change.
-- **Keep main current locally**: `git checkout main && git fetch origin && git pull --ff-only` before starting or merging work.
-- **Regularly sync your branch**: `git checkout feature/slug && git rebase origin/main` (or merge) to keep up with upstream changes; resolve conflicts promptly.
-- **Review before pushing**: run `bundle exec jekyll build` or the local server, check `git status`, and craft clear commits.
-- **Open a pull request**: `git push -u origin feature/slug`, request review, ensure checks pass, then merge via a clean PR (fast-forward or squash). Delete the branch after merge to keep the repo tidy.
-
-### Sample branch workflow
+Development preview:
 
 ```bash
-git checkout main
-git fetch origin
-git pull --ff-only        # update local main
-git checkout -b feature/awesome-update
-# make commits
-bundle exec jekyll build  # sanity check
-git fetch origin
-git rebase origin/main    # keep branch current
-git push -u origin feature/awesome-update
+npm start
 ```
 
-After review, use GitHub's squash-merge (or fast-forward) to integrate changes, then prune locally: `git branch -d feature/awesome-update` and `git fetch --prune`.
+This runs the React dev server for interactive local development.
 
-<!-- ### Keeping forks in sync
-
-If you're working from a fork, add the upstream remote once:
+Production build:
 
 ```bash
-git remote add upstream git@github.com:tarushsinha/tarushsinha.github.io.git
+npm run build
 ```
 
-Then keep `main` updated with `git fetch upstream && git checkout main && git rebase upstream/main` so your branches track the latest changes. -->
+This only creates the `build/` folder locally. It does not push anything to GitHub.
+
+Production-build preview:
+
+```bash
+npx serve -s build
+```
+
+Use this after `npm run build` to preview the built site locally before deploy.
+
+---
+
+## Deploy to GitHub Pages
+
+```bash
+npm run deploy
+```
+
+Recommended flow for this repo:
+
+1. Test locally with `npm start` for dev preview and `npm run build` for a production build.
+2. Push your feature branch and merge it into `master`.
+3. Check out `master` locally and pull the latest changes.
+4. Run `npm run deploy` from `master` when you are ready to publish.
+
+This runs `npm run build` and then pushes the built `build/` output to the `gh-pages` branch.
+For this repository, the site should be live at `https://tarushsinha.github.io`.
+
+For this to work, GitHub Pages should be configured to publish from the `gh-pages` branch.
+
+---
+
+## Managing your Atlas data
+
+All locations, trips, and photo albums are stored in `src/data/atlas.js`.
+
+### Option A — CLI (recommended)
+
+```bash
+npm run atlas
+```
+
+Interactive terminal menu. Options:
+
+| Action | What it does |
+|---|---|
+| Add location | Add a new city/place to the map |
+| Add trip | Add a flight arc between two locations, pick color |
+| Add visit | Log a visit to a location (date, notes) |
+| Update photo album | Attach a Google Photos album URL to a visit |
+| Remove trip | Delete a trip arc |
+| List all | Print all current data |
+
+After any change, merge to `master` and run `npm run deploy` when you are ready to publish.
+
+### Option B — Edit directly
+
+Open `src/data/atlas.js` and edit the `LOCATIONS` and `TRIPS` arrays directly.
+
+**Location fields:**
+```js
+{
+  id: "cityname",           // unique slug, no spaces
+  name: "City Name",
+  country: "Country",
+  coords: [lng, lat],       // longitude first, then latitude
+  hub: true,                // true = place you lived (filled pin)
+  hubColor: "#a07848",      // pin color (only if hub: true)
+  visits: [
+    {
+      id: "cityname-1",
+      label: "Trip name",
+      dateRange: "Month Year",
+      notes: "Optional notes",
+      albumUrl: "https://photos.google.com/...",  // or null
+    }
+  ],
+}
+```
+
+**Trip fields:**
+```js
+{
+  id: "trip-1",
+  label: "NYC → London",
+  from: "nyc",              // location id
+  to: "london",             // location id
+  color: "#7a6aaa",         // arc/thread color
+  year: 2019,
+}
+```
+
+---
+
+## Customization
+
+| What | Where |
+|---|---|
+| Your name | `src/App.jsx` — line 1 of the nav |
+| Bio / about text | `src/components/About.jsx` |
+| Wiki posts | `src/components/Wiki.jsx` — the `POSTS` array |
+| External links (LinkedIn, GitHub, etc.) | `src/components/About.jsx` — the `LINKS` array |
+| Color theme | `src/App.css` — `:root` CSS variables |
+| Map projection | `src/components/Atlas.jsx` — `PROJECTION` constant |
+
+---
+
+## Tech stack
+
+- React 18
+- D3-geo + Natural Earth projection
+- TopoJSON world atlas (loaded from CDN)
+- GitHub Pages via `gh-pages`
+- Node.js CLI with Inquirer.js

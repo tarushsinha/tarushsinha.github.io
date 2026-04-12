@@ -1,0 +1,447 @@
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700&family=Instrument+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap');
+
+/* ── JAPANDI TOKENS ── */
+:root {
+  --ink:     #1c1a17;
+  --ink2:    #3a3830;
+  --ink3:    #6b6860;
+  --stone:   #9a9690;
+  --stone2:  #c4c0b8;
+  --stone3:  #dedad4;
+  --linen:   #f0ece4;
+  --linen2:  #f7f4ef;
+  --linen3:  #faf8f4;
+  --moss:    #4a5c48;
+  --moss2:   #6e8a6a;
+  --cedar:   #7a5c3a;
+  --cedar2:  #a07848;
+  --cedar3:  #c8a878;
+  --cedar4:  #e8d8b8;
+  --water3:  #d4e8f0;
+  --water4:  #eaf4f8;
+  --radius:  6px;
+  --border:  1px solid var(--stone3);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Instrument Sans', sans-serif;
+  background: var(--linen3);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ── */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 28px;
+  background: var(--linen3);
+  border-bottom: var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+.nav-name {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+}
+.nav-kanji {
+  color: var(--cedar2);
+  font-weight: 400;
+  margin-left: 6px;
+}
+.nav-tabs {
+  display: flex;
+  border: var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.nav-tab {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 7px 20px;
+  background: var(--linen3);
+  color: var(--stone);
+  border: none;
+  border-right: var(--border);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.nav-tab:last-child { border-right: none; }
+.nav-tab:hover:not(.active) { background: var(--linen); color: var(--ink2); }
+.nav-tab.active { background: var(--ink); color: var(--linen3); }
+
+.main { flex: 1; }
+
+/* ── SHARED SECTION PIECES ── */
+.section-tag {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin-bottom: 6px;
+}
+.serif { font-family: 'Shippori Mincho', serif; }
+
+/* ── ATLAS ── */
+.atlas-wrap { display: flex; flex-direction: column; }
+
+.atlas-map-container {
+  position: relative;
+  background: var(--water4);
+  border-bottom: var(--border);
+  overflow: hidden;
+}
+.atlas-map-container svg { display: block; width: 100%; }
+
+.atlas-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: var(--border);
+}
+.atlas-stat {
+  padding: 14px 22px;
+  border-right: var(--border);
+}
+.atlas-stat:last-child { border-right: none; }
+.atlas-stat-n {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 3px;
+}
+.atlas-stat-l {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+.atlas-legend {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 11px 22px;
+  background: var(--linen2);
+  border-bottom: var(--border);
+  flex-wrap: wrap;
+}
+.atlas-legend-title {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+.leg-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--ink2);
+}
+.leg-pin-hub {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--cedar2);
+  border: 2px solid var(--linen3);
+  outline: 1.5px solid var(--cedar2);
+  flex-shrink: 0;
+}
+.leg-pin-visit {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--moss);
+  flex-shrink: 0;
+}
+.leg-thread {
+  width: 20px; height: 2px;
+  background: var(--cedar2);
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
+.atlas-footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.atlas-footer-cell {
+  padding: 13px 22px;
+  border-right: var(--border);
+}
+.atlas-footer-cell:last-child { border-right: none; }
+.atlas-footer-link {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 13px;
+  color: var(--ink3);
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+}
+.atlas-footer-link:hover { color: var(--cedar2); }
+
+/* ── LOCATION DRAWER ── */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(28, 26, 23, 0.4);
+  z-index: 300;
+  display: flex;
+  justify-content: flex-end;
+}
+.drawer {
+  width: 360px;
+  max-width: 90vw;
+  background: var(--linen3);
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  border-left: var(--border);
+  animation: slideIn 0.22s ease;
+}
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+.drawer-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 22px 22px 16px;
+  border-bottom: var(--border);
+  background: var(--linen2);
+}
+.drawer-name {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.drawer-country {
+  font-size: 12px;
+  color: var(--stone);
+  letter-spacing: 0.04em;
+}
+.drawer-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--stone);
+  cursor: pointer;
+  line-height: 1;
+  padding: 2px 4px;
+}
+.drawer-close:hover { color: var(--ink); }
+.drawer-hub-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--cedar4);
+  color: var(--cedar);
+  border-radius: 3px;
+  padding: 3px 8px;
+  margin-top: 6px;
+}
+.drawer-visits { padding: 18px 22px; flex: 1; }
+.drawer-visits-title {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin-bottom: 14px;
+}
+.visit-card {
+  border: var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  background: #fff;
+}
+.visit-label {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.visit-date {
+  font-size: 11px;
+  color: var(--stone);
+  margin-bottom: 6px;
+}
+.visit-notes {
+  font-size: 12px;
+  color: var(--ink3);
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+.visit-album {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--cedar2);
+  text-decoration: none;
+  border: 1px solid var(--cedar4);
+  border-radius: 4px;
+  padding: 4px 10px;
+  background: var(--cedar4);
+  transition: background 0.15s;
+}
+.visit-album:hover { background: var(--cedar3); color: var(--cedar); }
+.visit-no-album {
+  font-size: 11px;
+  color: var(--stone2);
+  font-style: italic;
+}
+.drawer-no-visits {
+  font-size: 13px;
+  color: var(--stone);
+  text-align: center;
+  padding: 32px 0;
+}
+
+/* ── WIKI ── */
+.wiki-wrap { display: grid; grid-template-columns: 1fr 200px; }
+.wiki-main { padding: 28px 26px; border-right: var(--border); }
+.wiki-title {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.wiki-sub { font-size: 12px; color: var(--stone); margin-bottom: 22px; letter-spacing: 0.02em; }
+.wiki-filters { display: flex; gap: 6px; margin-bottom: 22px; flex-wrap: wrap; }
+.wiki-filter {
+  font-size: 11px;
+  border: var(--border);
+  border-radius: 20px;
+  padding: 4px 13px;
+  cursor: pointer;
+  background: var(--linen3);
+  color: var(--stone);
+  letter-spacing: 0.03em;
+  transition: all 0.15s;
+}
+.wiki-filter.on { background: var(--ink); color: var(--linen3); border-color: var(--ink); }
+.wiki-filter:hover:not(.on) { background: var(--linen); color: var(--ink2); }
+.wiki-posts { display: flex; flex-direction: column; }
+.wiki-post {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 0;
+  border-bottom: var(--border);
+  gap: 12px;
+}
+.wiki-post:last-child { border-bottom: none; }
+.wiki-post-left { display: flex; align-items: center; gap: 10px; }
+.wiki-type {
+  font-size: 10px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+.t-essay   { background: #e8e4f4; color: #4a4270; }
+.t-blog    { background: #dde8d8; color: #2e4a2c; }
+.t-podcast { background: #ede0d4; color: #4a3018; }
+.t-wiki    { background: #dce0e8; color: #2c3448; }
+.wiki-post-title { font-size: 13px; color: var(--ink); }
+.wiki-post-date  { font-size: 11px; color: var(--stone); flex-shrink: 0; }
+.wiki-aside { background: var(--linen2); display: flex; flex-direction: column; }
+.wiki-map-mini { flex: 1; min-height: 160px; overflow: hidden; cursor: pointer; }
+.wiki-map-mini svg { display: block; width: 100%; height: 100%; }
+.wiki-aside-link {
+  padding: 11px 14px;
+  border-top: var(--border);
+  font-size: 11px;
+  color: var(--stone);
+  cursor: pointer;
+  text-align: center;
+  background: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  width: 100%;
+  letter-spacing: 0.04em;
+  transition: color 0.15s;
+}
+.wiki-aside-link:hover { color: var(--cedar2); }
+
+/* ── ABOUT ── */
+.about-wrap { display: grid; grid-template-columns: 1fr 1fr; }
+.about-main { padding: 30px 28px; border-right: var(--border); }
+.about-name {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  margin-bottom: 4px;
+}
+.about-role { font-size: 13px; color: var(--stone); margin-bottom: 20px; letter-spacing: 0.02em; }
+.about-bio  { font-size: 13px; color: var(--ink2); line-height: 1.8; margin-bottom: 24px; }
+.about-divider { width: 32px; height: 1px; background: var(--cedar2); margin-bottom: 20px; }
+.about-links { display: flex; flex-direction: column; }
+.about-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: var(--border);
+  cursor: pointer;
+  text-decoration: none;
+}
+.about-link:last-child { border-bottom: none; }
+.about-link-left { display: flex; align-items: center; gap: 12px; }
+.about-link-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.about-link-name { font-size: 13px; color: var(--ink); font-weight: 500; }
+.about-link-desc { font-size: 11px; color: var(--stone); margin-top: 1px; }
+.about-link-arr  { font-size: 12px; color: var(--stone2); }
+.about-right { padding: 30px 26px; background: var(--linen2); display: flex; flex-direction: column; gap: 20px; }
+.about-map-thumb {
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: var(--border);
+  cursor: pointer;
+}
+.about-map-thumb svg { display: block; width: 100%; }
+.about-map-cta {
+  font-size: 11px; color: var(--stone); text-align: center;
+  cursor: pointer; background: none; border: none; letter-spacing: 0.04em;
+  transition: color 0.15s;
+}
+.about-map-cta:hover { color: var(--cedar2); }
+.about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.about-stat {
+  background: var(--linen3);
+  border: var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+.about-stat-n {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+}
+.about-stat-l { font-size: 11px; color: var(--stone); margin-top: 3px; letter-spacing: 0.04em; }
