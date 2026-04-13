@@ -235,7 +235,7 @@ export default function Atlas({ onAbout, onWiki }) {
       </div>
 
       <div className="atlas-stats">
-        <div className="atlas-stat"><div className="atlas-stat-n">6</div><div className="atlas-stat-l">Continents</div></div>
+        <div className="atlas-stat"><div className="atlas-stat-n">5</div><div className="atlas-stat-l">Continents</div></div>
         <div className="atlas-stat"><div className="atlas-stat-n">{LOCATIONS.length}</div><div className="atlas-stat-l">Locations</div></div>
         <div className="atlas-stat"><div className="atlas-stat-n">{TRIPS.length}</div><div className="atlas-stat-l">Trips logged</div></div>
         <div className="atlas-stat"><div className="atlas-stat-n">{LOCATIONS.filter(l => l.hub).length}</div><div className="atlas-stat-l">Home bases</div></div>

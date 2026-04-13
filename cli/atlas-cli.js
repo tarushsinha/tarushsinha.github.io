@@ -404,24 +404,52 @@ async function addTrip(data) {
   });
 
   console.log(chalk.green(`\n  ✓ Added trip: ${fromName} → ${toName}`));
+
+  const { addVisitNow } = await inquirer.prompt([
+    {
+      name: "addVisitNow",
+      message: `Log a visit for ${toName} now?`,
+      type: "confirm",
+      default: true,
+    },
+  ]);
+
+  if (addVisitNow) {
+    await addVisit(data, {
+      preselectedLocationId: answers.to,
+      suggestedLabel: answers.label || `${fromName} → ${toName}`,
+      suggestedDateRange: String(answers.year),
+    });
+  }
 }
 
-async function addVisit(data) {
+async function addVisit(data, options = {}) {
   console.log(chalk.bold.green("\n  Add visit / photo album to a location\n"));
-  printLocations(data.locations);
+  const {
+    preselectedLocationId = null,
+    suggestedLabel = "",
+    suggestedDateRange = "",
+  } = options;
 
-  const locationChoices = data.locations.map((l) => ({ name: `${l.name}, ${l.country}`, value: l.id }));
+  let locId = preselectedLocationId;
 
-  const { locId } = await inquirer.prompt([
-    { name: "locId", message: "Which location?", type: "list", choices: locationChoices },
-  ]);
+  if (!locId) {
+    printLocations(data.locations);
+
+    const locationChoices = data.locations.map((l) => ({ name: `${l.name}, ${l.country}`, value: l.id }));
+
+    const response = await inquirer.prompt([
+      { name: "locId", message: "Which location?", type: "list", choices: locationChoices },
+    ]);
+    locId = response.locId;
+  }
 
   const loc = data.locations.find((l) => l.id === locId);
   console.log(chalk.dim(`\n  ${loc.name} has ${loc.visits.length} existing visit(s).\n`));
 
   const answers = await inquirer.prompt([
-    { name: "label", message: "Visit label (e.g. 'Summer 2023'):", type: "input" },
-    { name: "dateRange", message: "Date range (e.g. 'June – July 2023'):", type: "input" },
+    { name: "label", message: "Visit label (e.g. 'Summer 2023'):", type: "input", default: suggestedLabel },
+    { name: "dateRange", message: "Date range (e.g. 'June – July 2023'):", type: "input", default: suggestedDateRange },
     { name: "notes", message: "Notes (optional):", type: "input", default: "" },
     { name: "albumUrl", message: "Google Photos album URL (or leave blank):", type: "input", default: "" },
   ]);

@@ -50,6 +50,10 @@ body {
   font-weight: 700;
   color: var(--ink);
   letter-spacing: 0.01em;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
 .nav-kanji {
   color: var(--cedar2);
@@ -454,6 +458,23 @@ body {
 .article-body ol {
   padding-left: 22px;
 }
+.article-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 18px;
+  font-size: 14px;
+}
+.article-body th,
+.article-body td {
+  border: var(--border);
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+.article-body th {
+  background: var(--linen2);
+  color: var(--ink);
+}
 .article-body li + li { margin-top: 8px; }
 .article-body a {
   color: var(--cedar);
@@ -504,6 +525,7 @@ body {
   color: var(--ink);
   letter-spacing: -0.01em;
   margin-bottom: 4px;
+  margin-left: -6px;
 }
 .about-role { font-size: 13px; color: var(--stone); margin-bottom: 20px; letter-spacing: 0.02em; }
 .about-bio  { font-size: 13px; color: var(--ink2); line-height: 1.8; margin-bottom: 24px; }
@@ -595,9 +617,22 @@ body {
   align-items: flex-start;
   gap: 10px;
   padding: 13px 16px;
+  background: none;
+  border: none;
   border-bottom: var(--border);
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s;
 }
 .about-wiki-post:last-child { border-bottom: none; }
+.about-wiki-post:hover { background: rgba(160, 120, 72, 0.06); }
+.about-wiki-post:focus-visible {
+  outline: 1px solid var(--cedar3);
+  outline-offset: -1px;
+}
 .about-wiki-post .wiki-type {
   margin-top: 2px;
   flex-shrink: 0;

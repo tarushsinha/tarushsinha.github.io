@@ -6,13 +6,29 @@ import "./App.css";
 
 export default function App() {
   const [tab, setTab] = useState("about");
+  const [selectedWikiPost, setSelectedWikiPost] = useState(null);
+
+  function openWikiPost(post) {
+    if (!post) return;
+    if (post.url) {
+      window.open(post.url, "_blank", "noopener,noreferrer");
+      return;
+    }
+    setSelectedWikiPost(post);
+    setTab("wiki");
+  }
+
+  function openWikiIndex() {
+    setSelectedWikiPost(null);
+    setTab("wiki");
+  }
 
   return (
     <div className="site">
       <nav className="nav">
-        <div className="nav-name">
-          Tarush Sinha <span className="nav-kanji">道</span>
-        </div>
+        <button className="nav-name" onClick={() => setTab("about")}>
+          Tarush <span className="nav-kanji">道</span>
+        </button>
         <div className="nav-tabs">
           {["about", "wiki", "atlas"].map((t) => (
             <button
@@ -27,8 +43,20 @@ export default function App() {
       </nav>
       <main className="main">
         {tab === "atlas" && <Atlas onAbout={() => setTab("about")} onWiki={() => setTab("wiki")} />}
-        {tab === "wiki"  && <Wiki  onAtlas={() => setTab("atlas")} />}
-        {tab === "about" && <About onAtlas={() => setTab("atlas")} onWiki={() => setTab("wiki")} />}
+        {tab === "wiki"  && (
+          <Wiki
+            onAtlas={() => setTab("atlas")}
+            selectedPost={selectedWikiPost}
+            onSelectPost={setSelectedWikiPost}
+          />
+        )}
+        {tab === "about" && (
+          <About
+            onAtlas={() => setTab("atlas")}
+            onWiki={openWikiIndex}
+            onOpenPost={openWikiPost}
+          />
+        )}
       </main>
     </div>
   );
