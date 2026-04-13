@@ -356,6 +356,12 @@ body {
 }
 .wiki-post:last-child { border-bottom: none; }
 .wiki-post-left { display: flex; align-items: center; gap: 10px; }
+.wiki-post-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
 .wiki-post-clickable {
   cursor: pointer;
   transition: background 0.15s;
@@ -373,6 +379,8 @@ body {
 .t-blog    { background: #dde8d8; color: #2e4a2c; }
 .t-podcast { background: #ede0d4; color: #4a3018; }
 .wiki-post-title { font-size: 13px; color: var(--ink); }
+.wiki-post-reading-time,
+.wiki-post-meta-sep,
 .wiki-post-date  { font-size: 11px; color: var(--stone); flex-shrink: 0; }
 .wiki-empty {
   padding: 22px 0;
@@ -434,6 +442,18 @@ body {
   margin-bottom: 8px;
 }
 .article-date {
+  font-size: 12px;
+  color: var(--stone);
+  letter-spacing: 0.04em;
+}
+.article-meta-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.article-meta-sep,
+.article-reading-time {
   font-size: 12px;
   color: var(--stone);
   letter-spacing: 0.04em;
