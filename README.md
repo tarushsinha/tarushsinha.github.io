@@ -15,6 +15,8 @@ npm install
 npm start
 ```
 
+If you pulled changes that added wiki markdown rendering, rerun `npm install` so `react-markdown` is installed locally.
+
 ## Local Preview
 
 Development preview:
@@ -63,9 +65,16 @@ For this to work, GitHub Pages should be configured to publish from the `gh-page
 
 ---
 
-## Managing your Atlas data
+## Managing Atlas and Wiki data
 
 All locations, trips, and photo albums are stored in `src/data/atlas.js`.
+Generated wiki metadata is stored in `src/data/wiki.js`.
+Markdown article files live in `public/content/`.
+Podcast metadata lives in `public/content/podcasts/index.json`.
+Folder-based typing is supported during sync:
+
+- `public/content/articles/*.md` → `type: "article"` and tag `article`
+- `public/content/blog/*.md` → `type: "blog"` and tag `blog`
 
 ### Option A — CLI (recommended)
 
@@ -84,11 +93,27 @@ Interactive terminal menu. Options:
 | Remove trip | Delete a trip arc |
 | List all | Print all current data |
 
-After any change, merge to `master` and run `npm run deploy` when you are ready to publish.
+Wiki actions:
+
+| Action | What it does |
+|---|---|
+| Sync wiki manifest | Scans `public/content/**/*.md`, reads `public/content/podcasts/index.json`, prints updated markdown files and injected frontmatter, and regenerates `src/data/wiki.js` |
+| Add podcast / external link | Appends a podcast entry to `public/content/podcasts/index.json`, then regenerates `src/data/wiki.js` |
+| List wiki entries | Prints the current generated wiki manifest |
+| Remove podcast entry | Removes a podcast / external link entry from `public/content/podcasts/index.json`, then regenerates `src/data/wiki.js` |
+
+Recommended wiki workflow:
+
+1. Export Notion articles as markdown into `public/content/articles/` or `public/content/blog/`
+2. Run `npm run atlas` and choose `Wiki` → `Sync wiki manifest from content + podcasts`
+3. Add any podcast / NotebookLM links via `Wiki` → `Add podcast / external link`
+4. Preview with `npm start` or `npm run build`
+5. Merge to `master` and run `npm run deploy` when ready
 
 ### Option B — Edit directly
 
 Open `src/data/atlas.js` and edit the `LOCATIONS` and `TRIPS` arrays directly.
+Open `src/data/wiki.js` to inspect the generated wiki manifest if needed.
 
 **Location fields:**
 ```js
@@ -131,7 +156,9 @@ Open `src/data/atlas.js` and edit the `LOCATIONS` and `TRIPS` arrays directly.
 |---|---|
 | Your name | `src/App.jsx` — line 1 of the nav |
 | Bio / about text | `src/components/About.jsx` |
-| Wiki posts | `src/components/Wiki.jsx` — the `POSTS` array |
+| Generated wiki manifest | `src/data/wiki.js` |
+| Wiki markdown article files | `public/content/*.md` |
+| Podcast metadata | `public/content/podcasts/index.json` |
 | External links (LinkedIn, GitHub, etc.) | `src/components/About.jsx` — the `LINKS` array |
 | Color theme | `src/App.css` — `:root` CSS variables |
 | Map projection | `src/components/Atlas.jsx` — `PROJECTION` constant |
@@ -141,6 +168,7 @@ Open `src/data/atlas.js` and edit the `LOCATIONS` and `TRIPS` arrays directly.
 ## Tech stack
 
 - React 18
+- React Markdown
 - D3-geo + Natural Earth projection
 - TopoJSON world atlas (loaded from CDN)
 - GitHub Pages via `gh-pages`

@@ -1,6 +1,6 @@
 import MiniMap from "./MiniMap";
 import { LOCATIONS, TRIPS } from "../data/atlas";
-import { POSTS } from "./Wiki";
+import { WIKI_POSTS } from "../data/wiki";
 
 const LINKS = [
   { name: "Resume",    desc: "Experience & background", color: "#a07848", url: "#" },
@@ -13,7 +13,9 @@ export default function About({ onAtlas, onWiki }) {
   const hubs = LOCATIONS.filter((l) => l.hub).length;
   const visited = LOCATIONS.length;
   const continents = 6;
-  const recent = POSTS.slice(0, 3);
+  const recent = [...WIKI_POSTS]
+    .sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")))
+    .slice(0, 3);
 
   return (
     <div className="about-wrap">
