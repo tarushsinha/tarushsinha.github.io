@@ -4,6 +4,11 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import MiniMap from "./MiniMap";
 import { WIKI_POSTS } from "../data/wiki";
+import {
+  formatReadingTime,
+  formatReadingTimeMinutes,
+  stripFrontmatter,
+} from "../utils/readingTime";
 
 export const POSTS = WIKI_POSTS;
 
@@ -17,13 +22,6 @@ function formatDate(iso) {
     : new Date(iso);
   if (Number.isNaN(date.getTime())) return iso;
   return date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
-}
-
-function stripFrontmatter(raw) {
-  if (!raw.startsWith("---\n")) return raw;
-  const end = raw.indexOf("\n---\n", 4);
-  if (end === -1) return raw;
-  return raw.slice(end + 5).trim();
 }
 
 function normalizeMarkdownLine(line) {
@@ -57,18 +55,30 @@ function normalizeMarkdown(raw) {
     .join("\n");
 }
 
+function getPostReadingTimeLabel(post) {
+  if (typeof post.readingTimeMinutes !== "number") return "";
+  return formatReadingTimeMinutes(post.readingTimeMinutes);
+}
+
 function ArticleView({ post, onBack }) {
   const [content, setContent] = useState(null);
+  const [readingTime, setReadingTime] = useState(getPostReadingTimeLabel(post));
+  const formattedDate = formatDate(post.date);
 
   useEffect(() => {
     let cancelled = false;
+    const computedReadingTime = getPostReadingTimeLabel(post);
 
     if (post.url || !post.file) {
       setContent(null);
+      setReadingTime(null);
       return () => {
         cancelled = true;
       };
     }
+
+    setContent(null);
+    setReadingTime(computedReadingTime || null);
 
     fetch(`/content/${post.file}`)
       .then((response) => {
@@ -76,10 +86,18 @@ function ArticleView({ post, onBack }) {
         return response.text();
       })
       .then((raw) => {
-        if (!cancelled) setContent(normalizeMarkdown(stripFrontmatter(raw)));
+        if (!cancelled) {
+          setContent(normalizeMarkdown(stripFrontmatter(raw)));
+          if (!computedReadingTime) {
+            setReadingTime(formatReadingTime(raw));
+          }
+        }
       })
       .catch(() => {
-        if (!cancelled) setContent("*Article not found.*");
+        if (!cancelled) {
+          setContent("*Article not found.*");
+          setReadingTime(null);
+        }
       });
 
     return () => {
@@ -95,7 +113,13 @@ function ArticleView({ post, onBack }) {
       </div>
       <div className="article-meta">
         <div className="article-title">{post.title}</div>
-        <div className="article-date">{formatDate(post.date)}</div>
+        {(formattedDate || readingTime) && (
+          <div className="article-meta-line">
+            {formattedDate && <span className="article-date">{formattedDate}</span>}
+            {formattedDate && readingTime && <span className="article-meta-sep">·</span>}
+            {readingTime && <span className="article-reading-time">{readingTime}</span>}
+          </div>
+        )}
       </div>
       <div className="article-body">
         {post.url ? (
@@ -157,7 +181,15 @@ export default function Wiki({ onAtlas, selectedPost, onSelectPost }) {
                 <span className={`wiki-type t-${post.type}`}>{post.type}</span>
                 <span className="wiki-post-title">{post.title}</span>
               </div>
-              <span className="wiki-post-date">{formatDate(post.date)}</span>
+              <div className="wiki-post-meta">
+                {post.readingTimeMinutes && (
+                  <span className="wiki-post-reading-time">
+                    {formatReadingTimeMinutes(post.readingTimeMinutes)}
+                  </span>
+                )}
+                {post.date && post.readingTimeMinutes && <span className="wiki-post-meta-sep">·</span>}
+                <span className="wiki-post-date">{formatDate(post.date)}</span>
+              </div>
             </div>
           ))}
         </div>

@@ -9,6 +9,7 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "fs";
 import { basename, dirname, extname, join, relative, sep } from "path";
 import { fileURLToPath } from "url";
+import { estimateReadingTime } from "../src/utils/readingTime.js";
 
 const inquirer = (await import("inquirer")).default;
 const chalk = (await import("chalk")).default;
@@ -265,6 +266,7 @@ function buildMarkdownPost(relativePath) {
   const result = ensureMarkdownMetadata(relativePath);
   const data = result.data;
   const id = data.slug || slugify(data.title || basename(relativePath, extname(relativePath)));
+  const raw = readFileSync(join(CONTENT_DIR, relativePath), "utf8");
 
   return {
     post: {
@@ -276,6 +278,7 @@ function buildMarkdownPost(relativePath) {
       url: null,
       source: "markdown",
       notionId: data.notion_id || null,
+      readingTimeMinutes: estimateReadingTime(raw).minutes,
     },
     sync: {
       file: relativePath,
