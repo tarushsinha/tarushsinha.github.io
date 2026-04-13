@@ -13,6 +13,9 @@ export const WIKI_POSTS = [
     url: null,
     source: "markdown",
     notionId: "e7e822ce-a4f4-4fb4-b85a-44bf5e0837c1",
+    topics: [
+      "Fitness & Health"
+    ],
     readingTimeMinutes: 11
   }
 ];

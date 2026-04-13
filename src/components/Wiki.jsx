@@ -5,6 +5,11 @@ import remarkGfm from "remark-gfm";
 import MiniMap from "./MiniMap";
 import { WIKI_POSTS } from "../data/wiki";
 import {
+  filterWikiPosts,
+  getAvailableTopics,
+  normalizeContentTopics,
+} from "../lib/wikiTopics";
+import {
   formatReadingTime,
   formatReadingTimeMinutes,
   stripFrontmatter,
@@ -64,6 +69,7 @@ function ArticleView({ post, onBack }) {
   const [content, setContent] = useState(null);
   const [readingTime, setReadingTime] = useState(getPostReadingTimeLabel(post));
   const formattedDate = formatDate(post.date);
+  const topics = normalizeContentTopics(post);
 
   useEffect(() => {
     let cancelled = false;
@@ -120,6 +126,13 @@ function ArticleView({ post, onBack }) {
             {readingTime && <span className="article-reading-time">{readingTime}</span>}
           </div>
         )}
+        {topics.length > 0 && (
+          <div className="article-topics">
+            {topics.map((topic) => (
+              <span key={topic} className="wiki-topic-pill article-topic-pill">{topic}</span>
+            ))}
+          </div>
+        )}
       </div>
       <div className="article-body">
         {post.url ? (
@@ -143,9 +156,16 @@ function ArticleView({ post, onBack }) {
 
 export default function Wiki({ onAtlas, selectedPost, onSelectPost }) {
   const [filter, setFilter] = useState("all");
+  const [topicFilter, setTopicFilter] = useState("all");
 
-  const sorted = [...WIKI_POSTS].sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
-  const visible = filter === "all" ? sorted : sorted.filter((post) => post.type === filter);
+  const topicOptions = getAvailableTopics(WIKI_POSTS, { type: filter });
+  const visible = filterWikiPosts(WIKI_POSTS, { type: filter, topic: topicFilter });
+
+  useEffect(() => {
+    if (topicFilter === "all") return;
+    if (topicOptions.includes(topicFilter)) return;
+    setTopicFilter("all");
+  }, [topicFilter, topicOptions]);
 
   if (selectedPost) {
     return <ArticleView post={selectedPost} onBack={() => onSelectPost(null)} />;
@@ -160,6 +180,7 @@ export default function Wiki({ onAtlas, selectedPost, onSelectPost }) {
           {FILTERS.map((filterName) => (
             <button
               key={filterName}
+              type="button"
               className={`wiki-filter ${filter === filterName ? "on" : ""}`}
               onClick={() => setFilter(filterName)}
             >
@@ -167,21 +188,57 @@ export default function Wiki({ onAtlas, selectedPost, onSelectPost }) {
             </button>
           ))}
         </div>
+        <div className="wiki-topic-section">
+          <div className="wiki-topic-filters">
+            <button
+              type="button"
+              className={`wiki-filter ${topicFilter === "all" ? "on" : ""}`}
+              onClick={() => setTopicFilter("all")}
+            >
+              all topics
+            </button>
+            {topicOptions.map((topic) => (
+              <button
+                key={topic}
+                type="button"
+                className={`wiki-filter ${topicFilter === topic ? "on" : ""}`}
+                onClick={() => setTopicFilter(topic)}
+              >
+                {topic}
+              </button>
+            ))}
+          </div>
+          {topicOptions.length === 0 && (
+            <div className="wiki-topic-empty">No topics available for this content filter.</div>
+          )}
+        </div>
         <div className="wiki-posts">
           {visible.length === 0 && (
             <div className="wiki-empty">No posts yet. Sync markdown or add a podcast entry in `npm run atlas`.</div>
           )}
-          {visible.map((post) => (
-            <div
-              key={post.id}
-              className="wiki-post wiki-post-clickable"
-              onClick={() => post.url ? window.open(post.url, "_blank", "noopener,noreferrer") : onSelectPost(post)}
-            >
-              <div className="wiki-post-left">
-                <span className={`wiki-type t-${post.type}`}>{post.type}</span>
-                <span className="wiki-post-title">{post.title}</span>
-              </div>
-              <div className="wiki-post-meta">
+          {visible.map((post) => {
+            const topics = normalizeContentTopics(post);
+
+            return (
+              <div
+                key={post.id}
+                className="wiki-post wiki-post-clickable"
+                onClick={() => post.url ? window.open(post.url, "_blank", "noopener,noreferrer") : onSelectPost(post)}
+              >
+                <div className="wiki-post-left">
+                  <span className={`wiki-type t-${post.type}`}>{post.type}</span>
+                  <div className="wiki-post-copy">
+                    <span className="wiki-post-title">{post.title}</span>
+                    {topics.length > 0 && (
+                      <div className="wiki-post-topics">
+                        {topics.map((topic) => (
+                          <span key={topic} className="wiki-topic-pill">{topic}</span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="wiki-post-meta">
                 {post.readingTimeMinutes && (
                   <span className="wiki-post-reading-time">
                     {formatReadingTimeMinutes(post.readingTimeMinutes)}
@@ -189,9 +246,10 @@ export default function Wiki({ onAtlas, selectedPost, onSelectPost }) {
                 )}
                 {post.date && post.readingTimeMinutes && <span className="wiki-post-meta-sep">·</span>}
                 <span className="wiki-post-date">{formatDate(post.date)}</span>
-              </div>
+                </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
