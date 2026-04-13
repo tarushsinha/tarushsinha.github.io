@@ -22,7 +22,7 @@ function formatDate(iso) {
 export default function About({ onAtlas, onWiki, onOpenPost }) {
   const hubs = LOCATIONS.filter((l) => l.hub).length;
   const visited = LOCATIONS.length;
-  const continents = 6;
+  const continents = 5;
   const recent = [...WIKI_POSTS]
     .sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")))
     .slice(0, 3);
