@@ -29,6 +29,7 @@ const FOLDER_TYPE_MAP = {
   blog: "blog",
   blogs: "blog",
 };
+const CLASSIFICATION_TAGS = new Set(["article", "blog", "podcast", "essay", "wiki"]);
 
 ensureDir(CONTENT_DIR);
 ensureDir(PODCASTS_DIR);
@@ -51,6 +52,41 @@ function parseArrayValue(value) {
   return parts
     .map((part) => part.trim().replace(/^["']|["']$/g, ""))
     .filter(Boolean);
+}
+
+function normalizeLabel(value) {
+  return String(value || "").trim().replace(/\s+/g, " ");
+}
+
+function normalizeLabelKey(value) {
+  return normalizeLabel(value).toLowerCase();
+}
+
+function readListValue(value) {
+  if (Array.isArray(value)) return value;
+  if (value === null || value === undefined || value === "") return [];
+  return [value];
+}
+
+function readTopicMetadata(frontmatter) {
+  return [...readListValue(frontmatter.tags), ...readListValue(frontmatter.topics)];
+}
+
+function normalizeContentTopics(frontmatter) {
+  const seen = new Set();
+  const topics = [];
+
+  for (const rawTopic of readTopicMetadata(frontmatter)) {
+    const label = normalizeLabel(rawTopic);
+    const key = normalizeLabelKey(label);
+
+    if (!label || CLASSIFICATION_TAGS.has(key) || seen.has(key)) continue;
+
+    seen.add(key);
+    topics.push(label);
+  }
+
+  return topics;
 }
 
 function parseFrontmatter(raw) {
@@ -109,9 +145,7 @@ function normalizeType(frontmatter, relativePath) {
   if (direct === "essay" || direct === "wiki") return "article";
   if (WIKI_TYPES.includes(direct)) return direct;
 
-  const tags = Array.isArray(frontmatter.tags)
-    ? frontmatter.tags.map((tag) => String(tag).toLowerCase())
-    : [];
+  const tags = readTopicMetadata(frontmatter).map((tag) => String(tag).toLowerCase());
   if (tags.includes("essay") || tags.includes("wiki")) return "article";
   const taggedType = WIKI_TYPES.find((type) => tags.includes(type));
   if (taggedType) return taggedType;
@@ -240,13 +274,20 @@ function ensureMarkdownMetadata(relativePath) {
     injected.push(`type="${next.type}"`);
   }
 
-  const existingTags = Array.isArray(next.tags) ? next.tags.map((tag) => String(tag)) : [];
-  const lowerTags = existingTags.map((tag) => tag.toLowerCase());
-  if (normalizedType && !lowerTags.includes(normalizedType)) {
-    next.tags = [...existingTags, normalizedType];
-    injected.push(`tags+=${normalizedType}`);
-  } else if (existingTags.length) {
-    next.tags = existingTags;
+  const normalizedTopics = normalizeContentTopics(next);
+  const hadTopicAlias = Object.prototype.hasOwnProperty.call(next, "topics");
+  if (hadTopicAlias) {
+    delete next.topics;
+    injected.push("topics->tags");
+  }
+  if (normalizedTopics.length > 0) {
+    if (JSON.stringify(next.tags) !== JSON.stringify(normalizedTopics)) {
+      next.tags = normalizedTopics;
+      injected.push("tags normalized");
+    }
+  } else if (Object.prototype.hasOwnProperty.call(next, "tags")) {
+    delete next.tags;
+    injected.push("tags cleared");
   }
 
   const hadFrontmatter = raw.startsWith("---\n") && raw.indexOf("\n---\n", 4) !== -1;
@@ -278,6 +319,7 @@ function buildMarkdownPost(relativePath) {
       url: null,
       source: "markdown",
       notionId: data.notion_id || null,
+      topics: normalizeContentTopics(data),
       readingTimeMinutes: estimateReadingTime(raw).minutes,
     },
     sync: {
@@ -297,6 +339,7 @@ function buildPodcastPosts() {
     file: null,
     url: entry.url,
     source: "podcast",
+    topics: normalizeContentTopics(entry),
   }));
 }
 

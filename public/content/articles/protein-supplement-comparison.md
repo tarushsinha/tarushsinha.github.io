@@ -2,7 +2,7 @@
 layout: "article"
 title: "Protein Supplement Comparison"
 date: "2024-01-01"
-tags: ["Fitness & Health", "article"]
+tags: ["Fitness & Health"]
 notion_id: "e7e822ce-a4f4-4fb4-b85a-44bf5e0837c1"
 slug: "protein-supplement-comparison"
 type: "article"
