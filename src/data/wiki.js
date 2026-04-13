@@ -5,6 +5,21 @@
 
 export const WIKI_POSTS = [
   {
+    id: "fee-for-service-in-us-healthcare",
+    type: "article",
+    title: "Fee-for-Service in US Healthcare",
+    date: "2024-12-12",
+    file: "articles/fee-for-service-in-us-healthcare.md",
+    url: null,
+    source: "markdown",
+    notionId: "a316b381-d68c-4217-9d20-fd36f0eacaa9",
+    topics: [
+      "Healthcare",
+      "Economics"
+    ],
+    readingTimeMinutes: 4
+  },
+  {
     id: "protein-supplement-comparison",
     type: "article",
     title: "Protein Supplement Comparison",
