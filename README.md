@@ -1,4 +1,4 @@
-# Atlas Site
+# Personal Site
 
 Personal website with an illustrated interactive world map, wiki, and about page.
 Built with React + D3. Deployed to GitHub Pages with `gh-pages`.
