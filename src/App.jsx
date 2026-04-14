@@ -1,12 +1,64 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Atlas from "./components/Atlas";
 import Wiki from "./components/Wiki";
 import About from "./components/About";
+import { WIKI_POSTS } from "./data/wiki";
+import {
+  findWikiPostBySlug,
+  getWikiPostPath,
+  normalizePathname,
+  parseAppRoute,
+} from "./lib/routes";
 import "./App.css";
 
 export default function App() {
-  const [tab, setTab] = useState("about");
-  const [selectedWikiPost, setSelectedWikiPost] = useState(null);
+  const [pathname, setPathname] = useState(() => normalizePathname(window.location.pathname));
+
+  const route = useMemo(() => parseAppRoute(pathname), [pathname]);
+  const selectedWikiPost = useMemo(
+    () => (route.articleSlug ? findWikiPostBySlug(WIKI_POSTS, route.articleSlug) : null),
+    [route.articleSlug]
+  );
+  const canonicalPath = route.section === "wiki" && route.articleSlug && !selectedWikiPost
+    ? "/wiki"
+    : route.canonicalPath;
+
+  function navigate(path, { replace = false } = {}) {
+    const nextPath = normalizePathname(path);
+    const method = replace ? "replaceState" : "pushState";
+    window.history[method](null, "", nextPath);
+    setPathname(nextPath);
+  }
+
+  useEffect(() => {
+    const onPopState = () => {
+      setPathname(normalizePathname(window.location.pathname));
+    };
+
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
+  useEffect(() => {
+    if (canonicalPath !== pathname) {
+      navigate(canonicalPath, { replace: true });
+    }
+  }, [canonicalPath, pathname]);
+
+  useEffect(() => {
+    const pageTitle = route.section === "wiki" && selectedWikiPost
+      ? `${selectedWikiPost.title} | Tarush's Hub`
+      : route.section === "wiki"
+        ? "Wiki | Tarush's Hub"
+        : route.section === "atlas"
+          ? "Atlas | Tarush's Hub"
+          : "Tarush's Hub";
+    document.title = pageTitle;
+
+    const canonicalUrl = `${window.location.origin}${canonicalPath}`;
+    const canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (canonicalLink) canonicalLink.setAttribute("href", canonicalUrl);
+  }, [canonicalPath, route.section, selectedWikiPost]);
 
   function openWikiPost(post) {
     if (!post) return;
@@ -14,45 +66,48 @@ export default function App() {
       window.open(post.url, "_blank", "noopener,noreferrer");
       return;
     }
-    setSelectedWikiPost(post);
-    setTab("wiki");
+    navigate(getWikiPostPath(post));
   }
 
   function openWikiIndex() {
-    setSelectedWikiPost(null);
-    setTab("wiki");
+    navigate("/wiki");
   }
 
   return (
     <div className="site">
       <nav className="nav">
-        <button className="nav-name" onClick={() => setTab("about")}>
+        <button className="nav-name" onClick={() => navigate("/")}>
           Tarush <span className="nav-kanji">道</span>
         </button>
         <div className="nav-tabs">
-          {["about", "wiki", "atlas"].map((t) => (
+          {[
+            { id: "about", label: "about", path: "/" },
+            { id: "wiki", label: "wiki", path: "/wiki" },
+            { id: "atlas", label: "atlas", path: "/atlas" },
+          ].map((tab) => (
             <button
-              key={t}
-              className={`nav-tab ${tab === t ? "active" : ""}`}
-              onClick={() => setTab(t)}
+              key={tab.id}
+              className={`nav-tab ${route.section === tab.id ? "active" : ""}`}
+              onClick={() => navigate(tab.path)}
             >
-              {t}
+              {tab.label}
             </button>
           ))}
         </div>
       </nav>
       <main className="main">
-        {tab === "atlas" && <Atlas onAbout={() => setTab("about")} onWiki={() => setTab("wiki")} />}
-        {tab === "wiki"  && (
+        {route.section === "atlas" && <Atlas onAbout={() => navigate("/")} onWiki={() => navigate("/wiki")} />}
+        {route.section === "wiki"  && (
           <Wiki
-            onAtlas={() => setTab("atlas")}
+            onAtlas={() => navigate("/atlas")}
             selectedPost={selectedWikiPost}
-            onSelectPost={setSelectedWikiPost}
+            onSelectPost={openWikiPost}
+            onOpenIndex={openWikiIndex}
           />
         )}
-        {tab === "about" && (
+        {route.section === "about" && (
           <About
-            onAtlas={() => setTab("atlas")}
+            onAtlas={() => navigate("/atlas")}
             onWiki={openWikiIndex}
             onOpenPost={openWikiPost}
           />

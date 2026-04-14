@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting…</title>
+    <script>
+      (function () {
+        var path = window.location.pathname || "/";
+        var query = window.location.search ? window.location.search.slice(1) : "";
+        var hash = window.location.hash ? window.location.hash.slice(1) : "";
+        var target = "/?p=" + encodeURIComponent(path);
+
+        if (query) target += "&q=" + encodeURIComponent(query);
+        if (hash) target += "&h=" + encodeURIComponent(hash);
+
+        window.location.replace(target);
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>
