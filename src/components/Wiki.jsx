@@ -154,7 +154,7 @@ function ArticleView({ post, onBack }) {
   );
 }
 
-export default function Wiki({ onAtlas, selectedPost, onSelectPost }) {
+export default function Wiki({ onAtlas, selectedPost, onSelectPost, onOpenIndex }) {
   const [filter, setFilter] = useState("all");
   const [topicFilter, setTopicFilter] = useState("all");
 
@@ -168,7 +168,7 @@ export default function Wiki({ onAtlas, selectedPost, onSelectPost }) {
   }, [topicFilter, topicOptions]);
 
   if (selectedPost) {
-    return <ArticleView post={selectedPost} onBack={() => onSelectPost(null)} />;
+    return <ArticleView post={selectedPost} onBack={onOpenIndex} />;
   }
 
   return (
