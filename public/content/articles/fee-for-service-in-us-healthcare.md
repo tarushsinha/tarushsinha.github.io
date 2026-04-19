@@ -1,7 +1,7 @@
 ---
 layout: "article"
 title: "Fee-for-Service in US Healthcare"
-date: "2026-04-13"
+date: "2024-12-13"
 tags: ["Healthcare", "Economics"]
 notion_id: "a316b381-d68c-4217-9d20-fd36f0eacaa9"
 slug: "fee-for-service-in-us-healthcare"

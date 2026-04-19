@@ -5,10 +5,53 @@
 
 export const WIKI_POSTS = [
   {
+    id: "zero-based-budgeting",
+    type: "article",
+    title: "Zero-Based Budgeting",
+    date: "2025-12-14",
+    file: "articles/zero-based-budgeting.md",
+    url: null,
+    source: "markdown",
+    notionId: "769c77c2-1330-43fd-8efa-5eb8c16e1b34",
+    topics: [
+      "Economics"
+    ],
+    readingTimeMinutes: 2
+  },
+  {
+    id: "ebitda-earnings-before-interest-taxes-depreciations-and-amortization",
+    type: "article",
+    title: "(EBITDA) Earnings Before Interest, Taxes, Depreciations, and Amortization",
+    date: "2025-11-18",
+    file: "articles/ebitda-earnings-before-interest-taxes-depreciations-and-amortization.md",
+    url: null,
+    source: "markdown",
+    notionId: "85a4da32-74ee-4c34-9ae5-9da4eef9cfd7",
+    topics: [
+      "Economics"
+    ],
+    readingTimeMinutes: 4
+  },
+  {
+    id: "capitated-healthcare-systems",
+    type: "article",
+    title: "Capitated Healthcare Systems",
+    date: "2025-01-03",
+    file: "articles/capitated-healthcare-systems.md",
+    url: null,
+    source: "markdown",
+    notionId: "a3a850d5-b25f-4b00-a150-f18ad8441726",
+    topics: [
+      "Healthcare",
+      "Economics"
+    ],
+    readingTimeMinutes: 2
+  },
+  {
     id: "fee-for-service-in-us-healthcare",
     type: "article",
     title: "Fee-for-Service in US Healthcare",
-    date: "2024-12-12",
+    date: "2024-12-13",
     file: "articles/fee-for-service-in-us-healthcare.md",
     url: null,
     source: "markdown",
