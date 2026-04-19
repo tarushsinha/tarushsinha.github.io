@@ -32,6 +32,12 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+.site {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 /* ── NAV ── */
 .nav {
   display: flex;
@@ -82,7 +88,12 @@ body {
 .nav-tab:hover:not(.active) { background: var(--linen); color: var(--ink2); }
 .nav-tab.active { background: var(--ink); color: var(--linen3); }
 
-.main { flex: 1; }
+.main {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
 
 /* ── SHARED SECTION PIECES ── */
 .section-tag {
@@ -557,7 +568,12 @@ body {
 .article-ext-link:hover { color: var(--cedar2); }
 
 /* ── ABOUT ── */
-.about-wrap { display: grid; grid-template-columns: 1fr 1fr 220px; }
+.about-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr 220px;
+  flex: 1;
+  min-height: 0;
+}
 .about-main { padding: 30px 28px; border-right: var(--border); }
 .about-name {
   font-family: 'Shippori Mincho', serif;
@@ -652,6 +668,21 @@ body {
   display: flex;
   flex-direction: column;
   flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--stone2) transparent;
+}
+.about-wiki-posts::-webkit-scrollbar {
+  width: 7px;
+}
+.about-wiki-posts::-webkit-scrollbar-thumb {
+  background: var(--stone2);
+  border-radius: 999px;
+}
+.about-wiki-posts::-webkit-scrollbar-track {
+  background: transparent;
 }
 .about-wiki-post {
   display: flex;

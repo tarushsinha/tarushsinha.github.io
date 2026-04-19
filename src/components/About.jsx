@@ -25,7 +25,7 @@ export default function About({ onAtlas, onWiki, onOpenPost }) {
   const continents = 5;
   const recent = [...WIKI_POSTS]
     .sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")))
-    .slice(0, 3);
+    .slice(0, 20);
 
   return (
     <div className="about-wrap">
