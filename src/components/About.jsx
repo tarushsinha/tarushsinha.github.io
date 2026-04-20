@@ -29,32 +29,54 @@ export default function About({ onAtlas, onWiki, onOpenPost }) {
 
   return (
     <div className="about-wrap">
-      <div className="about-main">
-        <div className="about-name">Tarush Sinha</div>
-        <div className="about-role">experience · express · evolve</div>
-        <div className="about-bio">
-          <div>Based in California, previously Singapore and Washington D.C.</div> 
-          <div>I build things, write about what I'm learning, and collect places.</div>
-          <div>This site is a living record of that journey.</div>
+      <section className="about-primary">
+        <div className="about-intro">
+          <div className="about-name">Tarush Sinha</div>
+          <div className="about-role">experience · express · evolve</div>
+          <div className="about-bio">
+            <div>Based in California, previously Singapore and Washington D.C.</div>
+            <div>I build things, write about what I'm learning, and collect places.</div>
+            <div>This site is a living record of that journey.</div>
+          </div>
+          <div className="about-divider" />
         </div>
-        <div className="about-divider" />
-        <div className="about-links">
-          {LINKS.map((link) => (
-            <a key={link.name} href={link.url} className="about-link" target="_blank" rel="noopener noreferrer">
-              <div className="about-link-left">
-                <div className="about-link-dot" style={{ background: link.color }} />
-                <div>
-                  <div className="about-link-name">{link.name}</div>
-                  <div className="about-link-desc">{link.desc}</div>
+        <div className="about-links-section">
+          <div className="about-links">
+            {LINKS.map((link) => (
+              <a key={link.name} href={link.url} className="about-link" target="_blank" rel="noopener noreferrer">
+                <div className="about-link-left">
+                  <div className="about-link-dot" style={{ background: link.color }} />
+                  <div>
+                    <div className="about-link-name">{link.name}</div>
+                    <div className="about-link-desc">{link.desc}</div>
+                  </div>
                 </div>
+                <span className="about-link-arr">↗</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <aside className="about-wiki-panel">
+        <div className="about-wiki-header">
+          <span className="about-wiki-title">Recent writing</span>
+          <button className="about-wiki-all" onClick={onWiki}>all →</button>
+        </div>
+        <div className="about-wiki-posts">
+          {recent.map((post) => (
+            <button type="button" key={post.id} className="about-wiki-post" onClick={() => onOpenPost(post)}>
+              <span className={`wiki-type t-${post.type}`}>{post.type}</span>
+              <div className="about-wiki-post-body">
+                <div className="about-wiki-post-title">{post.title}</div>
+                <div className="about-wiki-post-date">{formatDate(post.date)}</div>
               </div>
-              <span className="about-link-arr">↗</span>
-            </a>
+            </button>
           ))}
         </div>
-      </div>
+      </aside>
 
-      <div className="about-right">
+      <aside className="about-side">
         <div className="about-map-thumb" onClick={onAtlas} title="Open atlas">
           <MiniMap height={150} />
         </div>
@@ -79,25 +101,7 @@ export default function About({ onAtlas, onWiki, onOpenPost }) {
             <div className="about-stat-l">Home bases</div>
           </div>
         </div>
-      </div>
-
-      <div className="about-wiki-panel">
-        <div className="about-wiki-header">
-          <span className="about-wiki-title">Recent writing</span>
-          <button className="about-wiki-all" onClick={onWiki}>all →</button>
-        </div>
-        <div className="about-wiki-posts">
-          {recent.map((post) => (
-            <button type="button" key={post.id} className="about-wiki-post" onClick={() => onOpenPost(post)}>
-              <span className={`wiki-type t-${post.type}`}>{post.type}</span>
-              <div className="about-wiki-post-body">
-                <div className="about-wiki-post-title">{post.title}</div>
-                <div className="about-wiki-post-date">{formatDate(post.date)}</div>
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
+      </aside>
     </div>
   );
 }
